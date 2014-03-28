@@ -889,7 +889,7 @@ containing a value of this type.
         public static final int list_item=0x7f070029;
         public static final int middle=0x7f07000b;
         public static final int never=0x7f07000d;
-        public static final int nfsTagDataTextView=0x7f07003d;
+        public static final int nfcTagDataTextView=0x7f07003d;
         public static final int none=0x7f070009;
         public static final int normal=0x7f070000;
         public static final int progress_circular=0x7f070018;

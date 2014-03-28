@@ -17,7 +17,7 @@
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"/>
 
     <TextView
-        android:id="@+id/nfsTagDataTextView"
+        android:id="@+id/nfcTagDataTextView"
         android:text="@string/tag_default_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,10 +31,6 @@ w
         android:layout_width="match_parent"
         android:layout_height="20dp" />
 
-    <Button
-        android:text="@string/tag_button_read"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 
 </LinearLayout>

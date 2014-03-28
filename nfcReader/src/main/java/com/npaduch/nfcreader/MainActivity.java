@@ -1,14 +1,22 @@
 package com.npaduch.nfcreader;
 
+import android.content.Context;
 import android.content.Intent;
 import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -67,11 +75,87 @@ public class MainActivity extends ActionBarActivity {
 
         // if messages were read, handle them here
         if(msgs != null) {
+            // fill up TextView
+            TextView output = (TextView)findViewById(R.id.nfcTagDataTextView);
+            output.setText(""); // clear text
             for (int i = 0; i < msgs.length; i++) {
                 for(int j=0; j <msgs[i].getRecords().length; j++)
-                    Log.d(TAG,"Tag Data: "+msgs[i].getRecords()[j].getPayload());
+                    // append each entry to the text view
+                    output.setText(output.getText()+"\n"+parseRecord(msgs[i].getRecords()[j]));
+
             }
         }
     }
 
+    String parseRecord(NdefRecord rcd) {
+        try {
+            byte[] payload = rcd.getPayload();
+
+             /*
+             *  First byte of payload is status byte encoding
+             *  bit7 = encoding, 0 = UTF-8, 1 = UTF-16
+             *  bit6 = reserved
+             *  bit 5:0 = length of lanuage code
+             *
+             */
+
+            // Get encoding (bit7)
+            String encoding;
+            if((payload[0] & 0x80) == 0)
+                encoding = "UTF-8";
+            else
+                encoding = "UTF-16";
+            Log.d(TAG,"Encoding: "+encoding);
+
+            // language code length [5:0]
+            int langCodeLen = payload[0] & 0x3F;
+            // get a substring of the specified length
+            String langCode = new String(payload, 1, langCodeLen, "US-ASCII");
+            Log.d(TAG,"Language code: "+langCode);
+
+            // The rest of the message is the raw text
+            String text = new String(payload, langCodeLen + 1, payload.length - langCodeLen - 1, encoding);
+            Log.d(TAG,"Text: "+text);
+
+            outputRecordToFile(payload);
+
+            return text;
+        } catch (Exception e) {
+            throw new RuntimeException("Record Parsing Failure!!");
+        }
+    }
+
+    private void outputRecordToFile(byte[] payload){
+
+        Log.d(TAG,"Writing to file.");
+
+        String FILENAME = "nfc_read_data";
+
+        try {
+            String state = Environment.getExternalStorageState();
+            if (Environment.MEDIA_MOUNTED.equals(state) ||
+                    Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+                Log.d(TAG,"Storage found");
+            }
+            else{
+                Log.d(TAG,"Not found");
+            }
+            //FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_WORLD_READABLE);
+            // Get the directory for the app's private pictures directory.
+            //File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File path = Environment.getExternalStorageDirectory();
+            File file = new File(path, FILENAME);
+            FileOutputStream fos  = new FileOutputStream(file);
+            if (!file.mkdirs()) {
+                Log.e(TAG, "Directory not created");
+            }
+            Log.d(TAG,"File opened: "+fos.toString());
+            fos.write(payload);
+            Log.d(TAG, "PAyload written");
+            fos.close();
+            Log.d(TAG, "File closed");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
