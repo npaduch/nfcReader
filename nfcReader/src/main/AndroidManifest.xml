@@ -15,6 +15,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- Filter for NFC discovered -->
+            <!-- This will fire off for plain text (see mimeType field) -->
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <uses-permission android:name="android.permission.NFC" />
         </activity>
     </application>
 

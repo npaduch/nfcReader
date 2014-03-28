@@ -865,7 +865,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f070015;
         public static final int action_menu_presenter=0x7f070016;
         public static final int action_mode_close_button=0x7f070024;
-        public static final int action_settings=0x7f07003d;
+        public static final int action_settings=0x7f07003e;
         public static final int activity_chooser_view_content=0x7f070025;
         public static final int always=0x7f07000f;
         public static final int beginning=0x7f07000a;
@@ -889,6 +889,7 @@ containing a value of this type.
         public static final int list_item=0x7f070029;
         public static final int middle=0x7f07000b;
         public static final int never=0x7f07000d;
+        public static final int nfsTagDataTextView=0x7f07003d;
         public static final int none=0x7f070009;
         public static final int normal=0x7f070000;
         public static final int progress_circular=0x7f070018;
@@ -967,7 +968,10 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000c;
         public static final int action_settings=0x7f0a000d;
         public static final int app_name=0x7f0a000e;
-        public static final int hello_world=0x7f0a000f;
+        public static final int tag_button_read=0x7f0a000f;
+        public static final int tag_default_data=0x7f0a0010;
+        public static final int tag_no_data=0x7f0a0011;
+        public static final int tag_title=0x7f0a0012;
     }
     public static final class style {
         /**  Customize your theme here. 
